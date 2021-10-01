@@ -23,7 +23,7 @@ setuptools.setup(
     python_requires=">=3.6",
     install_requires=[
         "pip",
-        "torch",
+#        "torch",
         "pandas",
         "numpy",
         "scipy",
