@@ -132,7 +132,7 @@ def map_data(ad_sp, ad_sc, markers, b=3000):
             ad_map_d[i] = tg.map_cells_to_space(
                 adata_sc=ad_sc,
                 adata_sp=sp,
-                device=f'cuda:{torch.cuda.current_device()} if torch.cuda.is_available() else 'cpu'',
+                device=f'cuda:{torch.cuda.current_device()}' if torch.cuda.is_available() else 'cpu',
             )
             sp_map_d[i] = sp
             print(f'{i + b} voxels mapped')
