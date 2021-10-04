@@ -17,27 +17,36 @@ usage: run_mapping.py [-h] [--output-dir OUTPUT_DIR] [--label-column LABEL_COLUM
                       sc_filepath sp_filepath
 
 positional arguments:
-  sc_filepath           Single cell data to be used for label transfer. Should be a .h5ad AnnData object. AnnData should have raw
+
+  sc_filepath:           Single cell data to be used for label transfer. Should be a .h5ad AnnData object. AnnData should have raw
                         single cell counts in either .X or .raw.X. There should be a column in .obs of name --label-column that
                         contains the annotation to be transfered to the spatial dataset.
-  sp_filepath           Spatial data that is to be mapped. Should be a .h5ad AnnData object or Visium Spaceranger outs. If AnnData
+                        
+  sp_filepath:           Spatial data that is to be mapped. Should be a .h5ad AnnData object or Visium Spaceranger outs. If AnnData
                         object the following information MUST be in the .obs metadata: "x" - x coordinate of voxel, "y" - y
                         coordinate of voxel. .var must coorespond to the gene markers in the dataset (they must match exactly with
                         genes in the single cell dataset to be included in the label transfer). .X holds intensity values or # counts
                         for each voxel. If spaceranger output then no modification is needed.
 
 optional arguments:
+
   -h, --help            show this help message and exit
-  --output-dir OUTPUT_DIR
+  
+  --output-dir:
                         Directory in which to save transfer results
-  --label-column LABEL_COLUMN
+                        
+  --label-column:
                         Name of column in single cell data storing label to be transfered. Default is "cell_type".
-  --n-variable-genes N_VARIABLE_GENES
+                        
+  --n-variable-genes:
                         Number of most variable genes in single cell data to use for each cell type during mapping. Default is 100.
-  --batch-size BATCH_SIZE
+                        
+  --batch-size:
                         Number of voxels to map at a time. Helps keep GPU from running out of memory. Default is 3000.
-  --invert-y            Whether to flip y axis in output plots.
-  --marker-filepath MARKER_FILEPATH
+                        
+  --invert-y:           Whether to flip y axis in output plots.
+  
+  --marker-filepath:
                         Markers to use as training genes. If not specified then most variable genes will be extracted from single
                         cell data.
 
