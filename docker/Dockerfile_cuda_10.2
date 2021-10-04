@@ -14,7 +14,7 @@ RUN conda env create --file Tangram/environment.yml
 RUN conda install -n tangram -y pytorch==1.7.1 torchvision==0.8.2 torchaudio==0.7.2 cudatoolkit=10.1 -c pytorch
 
 # install violet
-RUN /miniconda/envs/violet/bin/pip install -e Tangram
+RUN /miniconda/envs/tangram/bin/pip install -e Tangram
 
 ENV PATH="/miniconda/envs/tangram/bin:$PATH"
 

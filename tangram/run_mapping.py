@@ -51,6 +51,11 @@ GPU from running out of memory.')
 parser.add_argument('--invert-y', default=False, action='store_true',
                     help='Whether to flip y axis in output plots')
 
+parser.add_argument('--marker-filepath',
+                    help='Markers to use as training genes. If not \
+specified then most variable genes will be extracted from single cell \
+data.')
+
 
 def preprocess_spatial(a):
     a.obs['y'] = a.obs['array_col'].to_list()
@@ -76,6 +81,10 @@ def is_raw_counts(X):
 def reformat_sc(a):
     # see where raw counts are
     in_X = is_raw_counts(a.X)
+
+    if not in_X and a.raw is None:
+        raise RuntimeError('Raw count data not found in .x or .raw.X in \
+single cell data')
 
     if not in_X:
         in_raw = is_raw_counts(a.raw.X)
@@ -126,7 +135,7 @@ def map_data(ad_sp, ad_sc, markers, b=3000):
                 device=f'cuda:{torch.cuda.current_device()}',
             )
             sp_map_d[i] = sp
-        print(f'{i + b} voxels mapped')
+            print(f'{i + b} voxels mapped')
 
     ad_sp = anndata.concat(sp_map_d.values())
     ad_sp.var = sp_map_d[0].var.copy()
@@ -156,9 +165,14 @@ def main(args):
 
     print('loading single cell data')
     ad_sc = get_sc(args.sc_filepath, label=args.label_column)
-    print('extracting most variable genes')
-    sc.tl.rank_genes_groups(ad_sc, groupby='subclass_label', method='logreg')
-    markers = get_markers(ad_sc, n=args.n_variable_genes)
+
+    if args.marker_filepath is None:
+        print('extracting most variable genes')
+        sc.tl.rank_genes_groups(ad_sc, groupby='subclass_label')
+        markers = get_markers(ad_sc, n=args.n_variable_genes)
+    else:
+        markers = sorted(
+            pd.read_csv(args.marker_filepath).values[:, 0].flatten())
 
     print('mapping datasets')
     ad_map, ad_sp = map_data(ad_sp, ad_sc, markers, b=args.batch_size)
@@ -196,7 +210,7 @@ def main(args):
         plt.savefig(os.path.join(args.output_dir, f'test_scores.png'))
         plt.clf()
     except:
-        print('Error evaluating test genes')
+        print('Error evaluating test genes. Continuing')
 
     genes = ['cd3g', 'cd4', 'cd8a', 'cd68', 'ms4a1', 'lag3', 'foxp3', 'ca9',
              'cdh1', 'epcam', 'krt18', 'pecam1', 'bgn']

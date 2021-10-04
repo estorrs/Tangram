@@ -40,6 +40,7 @@ share/python-wheels/
 .installed.cfg
 *.egg
 sandbox/
+data/pdac_outs/
 
 # ignore coverage report
 *.coverage
