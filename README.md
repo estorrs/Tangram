@@ -55,7 +55,7 @@ optional arguments:
 Example command where single cell data is stored at inputs/sc.h5ad and cell type label is stored in the column "cell_type". Spaceranger outputs are stored at inputs/visium_outs.
 
 ```bash
-python run_mapping.py --output-dir outputs/ --label-column cell_type inputs/sc.h5ad inputs/visium_outs
+python tangram/run_mapping.py --output-dir outputs/ --label-column cell_type inputs/sc.h5ad inputs/visium_outs
 ```
 
 
@@ -65,8 +65,10 @@ The wrapper is available in the following Docker container: `estorrs/tangram_cud
 
 Below is an example of running the above **Example Usage** command from within the docker container.
 
+If your system has a GPU and you would like to use it be sure to include the `--gpus all` in the docker command.
+
 ```bash
-docker run -v </absolute/filepath/to/input/directory>:/inputs </absolute/filepath/to/output/dir>:/outputs -t estorrs/tangram_cuda10.2:0.0.1 python run_mapping.py --output-dir /outputs/example_outputs --label-column cell_type /inputs/sc.h5ad /intputs/visium_outs
+docker run --gpus all -v </absolute/filepath/to/input/directory>:/inputs -v </absolute/filepath/to/output/dir>:/outputs -t estorrs/tangram_cuda10.2:0.0.1 python /Tangram/tangram/run_mapping.py --output-dir /outputs/example_outputs --label-column cell_type /inputs/sc.h5ad /inputs/visium_outs
 ```
 
 
