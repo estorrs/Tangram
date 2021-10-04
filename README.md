@@ -1,3 +1,74 @@
+
+
+Wrapper for the Tangram single-cell -> spatial mapping tool.
+
+## Installation
+Can be installed via conda with the environment.yml file or used from within a Docker container.
+
+## Usage
+
+Single cell data needs to be in a Scanpy .h5ad object. To convert a Seurat .RDS object to a .h5ad object follow this [example](https://mojaveazure.github.io/seurat-disk/articles/convert-anndata.html) 
+
+General Usage
+-------------
+
+usage: run_mapping.py [-h] [--output-dir OUTPUT_DIR] [--label-column LABEL_COLUMN] [--n-variable-genes N_VARIABLE_GENES]
+                      [--batch-size BATCH_SIZE] [--invert-y] [--marker-filepath MARKER_FILEPATH]
+                      sc_filepath sp_filepath
+
+positional arguments:
+  sc_filepath           Single cell data to be used for label transfer. Should be a .h5ad AnnData object. AnnData should have raw
+                        single cell counts in either .X or .raw.X. There should be a column in .obs of name --label-column that
+                        contains the annotation to be transfered to the spatial dataset.
+  sp_filepath           Spatial data that is to be mapped. Should be a .h5ad AnnData object or Visium Spaceranger outs. If AnnData
+                        object the following information MUST be in the .obs metadata: "x" - x coordinate of voxel, "y" - y
+                        coordinate of voxel. .var must coorespond to the gene markers in the dataset (they must match exactly with
+                        genes in the single cell dataset to be included in the label transfer). .X holds intensity values or # counts
+                        for each voxel. If spaceranger output then no modification is needed.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --output-dir OUTPUT_DIR
+                        Directory in which to save transfer results
+  --label-column LABEL_COLUMN
+                        Name of column in single cell data storing label to be transfered. Default is "cell_type".
+  --n-variable-genes N_VARIABLE_GENES
+                        Number of most variable genes in single cell data to use for each cell type during mapping. Default is 100.
+  --batch-size BATCH_SIZE
+                        Number of voxels to map at a time. Helps keep GPU from running out of memory. Default is 3000.
+  --invert-y            Whether to flip y axis in output plots.
+  --marker-filepath MARKER_FILEPATH
+                        Markers to use as training genes. If not specified then most variable genes will be extracted from single
+                        cell data.
+
+#### Example Usage
+
+Example command where single cell data is stored at inputs/sc.h5ad and cell type label is stored in the column "cell_type". Spaceranger outputs are stored at inputs/visium_outs.
+
+```bash
+python run_mapping.py --output-dir outputs/ --label-column cell_type inputs/sc.h5ad inputs/visium_outs
+```
+
+
+#### Docker Example Usage
+
+The wrapper is available in the following Docker container: `estorrs/tangram_cuda10.2`
+
+Below is an example of running the above **Example Usage** command from within the docker container.
+
+```bash
+docker run -v </absolute/filepath/to/input/directory>:/inputs </absolute/filepath/to/output/dir>:/outputs -t estorrs/tangram_cuda10.2:0.0.1 python run_mapping.py --output-dir /outputs/example_outputs --label-column cell_type /inputs/sc.h5ad /intputs/visium_outs
+```
+
+
+
+###### Original tool documentation below:
+
+
+
+
+
+
 <img src="https://raw.githubusercontent.com/broadinstitute/Tangram/master/figures/tangram_large.png" width="400"> 
 
 [![PyPI version](https://badge.fury.io/py/tangram-sc.svg)](https://badge.fury.io/py/tangram-sc)
