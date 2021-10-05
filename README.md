@@ -9,6 +9,8 @@ Can be installed via conda with the environment.yml file or used from within a D
 
 Single cell data needs to be in a Scanpy .h5ad object. To convert a Seurat .RDS object to a .h5ad object follow this [example](https://mojaveazure.github.io/seurat-disk/articles/convert-anndata.html) 
 
+By default the wrapper will check if a GPU is available on your machine, if so it will run on said GPU, otherwise it will automatically run on the CPU. Note that if no GPU is available, running with CPU is 1-2 orders of magnitude slower than runtime with a GPU.
+
 General Usage
 -------------
 
