@@ -215,10 +215,11 @@ def main(args):
     genes = ['cd3g', 'cd4', 'cd8a', 'cd68', 'ms4a1', 'lag3', 'foxp3', 'ca9',
              'cdh1', 'epcam', 'krt18', 'pecam1', 'bgn']
     genes = [g for g in genes if g in ad_sc.var.index]
-    tg.plot_genes(genes, adata_measured=ad_sp, adata_predicted=ad_ge,
-                  robust=True, perc=0.02, x='x', y='y', invert_y=args.invert_y)
-    plt.savefig(os.path.join(args.output_dir, f'gene_probabilities.png'))
-    plt.clf()
+    if genes:
+        tg.plot_genes(genes, adata_measured=ad_sp, adata_predicted=ad_ge,
+                      robust=True, perc=0.02, x='x', y='y', invert_y=args.invert_y)
+        plt.savefig(os.path.join(args.output_dir, f'gene_probabilities.png'))
+        plt.clf()
 
     ad_sp.write_h5ad(os.path.join(args.output_dir, f'sp.h5ad'))
     ad_ge.write_h5ad(os.path.join(args.output_dir, f'ge.h5ad'))
