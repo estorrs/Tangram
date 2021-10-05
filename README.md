@@ -47,7 +47,7 @@ optional arguments:
   --invert-y:           Whether to flip y axis in output plots.
   
   --marker-filepath:
-                        Markers to use as training genes. If not specified then most variable genes will be extracted from single
+                        File containing markers (one gene per line) to use as training genes. If not specified then most variable genes will be extracted from single
                         cell data.
 
 #### Example Usage
@@ -68,12 +68,12 @@ Below is an example of running the above **Example Usage** command from within t
 If your system has a GPU and you would like to use it be sure to include the `--gpus all` in the docker command.
 
 ```bash
-docker run --gpus all -v </absolute/filepath/to/input/directory>:/inputs -v </absolute/filepath/to/output/dir>:/outputs -t estorrs/tangram_cuda10.2:0.0.1 python /Tangram/tangram/run_mapping.py --output-dir /outputs/example_outputs --label-column cell_type /inputs/sc.h5ad /inputs/visium_outs
+docker run --gpus all -v </absolute/filepath/to/input/directory>:/inputs -v </absolute/filepath/to/output/dir>:/outputs -t estorrs/tangram_cuda10.2:0.0.2 python /Tangram/tangram/run_mapping.py --output-dir /outputs/example_outputs --label-column cell_type /inputs/sc.h5ad /inputs/visium_outs
 ```
 
 
 
-###### Original tool documentation below:
+## Original tool documentation below:
 
 
 
