@@ -3,11 +3,23 @@
 Wrapper for the Tangram single-cell -> spatial mapping tool.
 
 ## Installation
-Can be installed via conda with the environment.yml file or used from within a Docker container.
+Can be installed via conda with the environment.yml file and pip
+
+```bash
+git clone https://github.com/estorrs/Tangram.git
+cd Tangram
+conda env create --file environment.yml
+conda activate tangram
+pip install .
+```
+
+or used from within a Docker container. See **Docker Usage** section below for more details.
 
 ## Usage
 
 Single cell data needs to be in a Scanpy .h5ad object. To convert a Seurat .RDS object to a .h5ad object follow this [example](https://mojaveazure.github.io/seurat-disk/articles/convert-anndata.html) 
+
+By default the wrapper will check if a GPU is available on your machine, if so it will run on said GPU, otherwise it will automatically run on the CPU. Note that if no GPU is available, running with CPU is 1-2 orders of magnitude slower than runtime with a GPU.
 
 General Usage
 -------------
@@ -47,7 +59,7 @@ optional arguments:
   --invert-y:           Whether to flip y axis in output plots.
   
   --marker-filepath:
-                        Markers to use as training genes. If not specified then most variable genes will be extracted from single
+                        File containing markers (one gene per line) to use as training genes. If not specified then most variable genes will be extracted from single
                         cell data.
 
 #### Example Usage
@@ -55,7 +67,7 @@ optional arguments:
 Example command where single cell data is stored at inputs/sc.h5ad and cell type label is stored in the column "cell_type". Spaceranger outputs are stored at inputs/visium_outs.
 
 ```bash
-python run_mapping.py --output-dir outputs/ --label-column cell_type inputs/sc.h5ad inputs/visium_outs
+python tangram/run_mapping.py --output-dir outputs/ --label-column cell_type inputs/sc.h5ad inputs/visium_outs
 ```
 
 
@@ -65,13 +77,15 @@ The wrapper is available in the following Docker container: `estorrs/tangram_cud
 
 Below is an example of running the above **Example Usage** command from within the docker container.
 
+If your system has a GPU and you would like to use it be sure to include the `--gpus all` in the docker command. If your system does not have a GPU the tool will automatically default to CPU.
+
 ```bash
-docker run -v </absolute/filepath/to/input/directory>:/inputs </absolute/filepath/to/output/dir>:/outputs -t estorrs/tangram_cuda10.2:0.0.1 python run_mapping.py --output-dir /outputs/example_outputs --label-column cell_type /inputs/sc.h5ad /intputs/visium_outs
+docker run --gpus all -v </absolute/filepath/to/input/directory>:/inputs -v </absolute/filepath/to/output/dir>:/outputs -t estorrs/tangram_cuda10.2:0.0.2 python /Tangram/tangram/run_mapping.py --output-dir /outputs/example_outputs --label-column cell_type /inputs/sc.h5ad /inputs/visium_outs
 ```
 
 
 
-###### Original tool documentation below:
+## Original tool documentation below:
 
 
 
