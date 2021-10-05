@@ -3,7 +3,17 @@
 Wrapper for the Tangram single-cell -> spatial mapping tool.
 
 ## Installation
-Can be installed via conda with the environment.yml file or used from within a Docker container.
+Can be installed via conda with the environment.yml file and pip
+
+```bash
+git clone https://github.com/estorrs/Tangram.git
+cd Tangram
+conda env create --file environment.yml
+conda activate tangram
+pip install .
+```
+
+or used from within a Docker container. See **Docker Usage** section below for more details.
 
 ## Usage
 
@@ -67,7 +77,7 @@ The wrapper is available in the following Docker container: `estorrs/tangram_cud
 
 Below is an example of running the above **Example Usage** command from within the docker container.
 
-If your system has a GPU and you would like to use it be sure to include the `--gpus all` in the docker command.
+If your system has a GPU and you would like to use it be sure to include the `--gpus all` in the docker command. If your system does not have a GPU the tool will automatically default to CPU.
 
 ```bash
 docker run --gpus all -v </absolute/filepath/to/input/directory>:/inputs -v </absolute/filepath/to/output/dir>:/outputs -t estorrs/tangram_cuda10.2:0.0.2 python /Tangram/tangram/run_mapping.py --output-dir /outputs/example_outputs --label-column cell_type /inputs/sc.h5ad /inputs/visium_outs
